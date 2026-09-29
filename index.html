@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="robots" content="noindex">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Copa Piston al mejor novio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Nunito:wght@700&display=swap" rel="stylesheet">
+<style>
+  :root { --s: 1.6; --rojo: #d7263d; --oro: #f2b705; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; background: #fff; overflow: hidden; }
+  body { display: flex; align-items: center; justify-content: center; font-family: 'Nunito', sans-serif; }
+
+  /* Fondo de autitos */
+  #fondo { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 0; }
+
+  /* Escena */
+  .scene { position: relative; width: 320px; height: 210px; z-index: 1; cursor: pointer; }
+  .scene.abierto { cursor: default; }
+  .sobre { position: absolute; inset: 0; transition: opacity .6s ease .5s; }
+  .out .sobre { opacity: 0; }
+  .sobre .atras { position: absolute; inset: 0; background: #b3172c; border-radius: 6px; z-index: 0; box-shadow: 0 10px 25px rgba(0,0,0,.25); }
+  .sobre .frente { position: absolute; inset: 0; background: var(--rojo); border-radius: 6px; z-index: 3;
+    clip-path: polygon(0 0, 50% 52%, 100% 0, 100% 100%, 0 100%); }
+  .solapa { position: absolute; top: 0; left: 0; width: 100%; height: 110px; background: #e63b50; z-index: 4;
+    clip-path: polygon(0 0, 100% 0, 50% 100%); transform-origin: top; transition: transform .6s ease, z-index 0s .3s; }
+  .abierto .solapa { transform: rotateX(180deg); z-index: 1; }
+  .sello { position: absolute; left: 50%; top: 92px; width: 34px; height: 34px; margin-left: -17px; border-radius: 50%;
+    background: var(--oro); color: var(--rojo); z-index: 5; display: grid; place-items: center; font-size: 18px;
+    box-shadow: 0 2px 6px rgba(0,0,0,.3); transition: opacity .2s; animation: latido 1.4s ease-in-out infinite; }
+  .abierto .sello { opacity: 0; animation: none; }
+  @keyframes latido { 50% { transform: scale(1.15); } }
+
+  /* Tarjeta */
+  .tarjeta { position: absolute; left: 10px; bottom: 10px; width: 300px; height: 190px; z-index: 2;
+    display: flex; background: #fffdf5; border: 3px solid var(--rojo); border-radius: 10px;
+    box-shadow: 0 6px 18px rgba(0,0,0,.25); transition: transform .8s cubic-bezier(.2,.8,.2,1); }
+  .abierto .tarjeta { transform: translateY(-115px); }
+  .out .tarjeta { z-index: 6; transform: translateY(0) scale(var(--s)); }
+  .izq, .der { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 8px; }
+  .izq { padding: 8px 6px 8px; border-right: 2px dashed #e7c9ce; }
+  .izq svg { width: 100%; flex: 1; min-height: 0; }
+  .nombre-copa { margin-top: 4px; font-family: 'Lilita One', 'Arial Black', sans-serif; font-size: 11px; line-height: 1.1; color: var(--rojo); text-transform: uppercase; text-align: center; }
+  .der { text-align: center; justify-content: flex-start; padding-top: 18px; }
+  .titulo { font-family: 'Lilita One', 'Arial Black', sans-serif; font-size: 26px; line-height: 1.05; color: var(--rojo); text-transform: uppercase; }
+  .sub { margin-top: 14px; font-size: 13px; color: #444; font-family: 'Lilita One', 'Arial Black', sans-serif; }
+  .corazon { margin-top: 6px; font-size: 28px; line-height: 1; color: var(--rojo); animation: latido 1.4s ease-in-out infinite; }
+
+  .pista { position: fixed; bottom: 7vh; left: 0; right: 0; text-align: center; z-index: 1; font-size: 17px; color: #555; transition: opacity .3s; }
+  body.listo .pista { opacity: 0; }
+
+  @media (prefers-reduced-motion: reduce) { * { transition-duration: .01s !important; animation: none !important; } }
+</style>
+</head>
+<body>
+
+<!-- Fondo: autitos Toyota dibujados -->
+<svg id="fondo" aria-hidden="true">
+  <defs>
+    <symbol id="auto" viewBox="0 0 120 50">
+      <path d="M6 34V27Q6 23 12 22L30 19L42 8Q44 6 48 6H80Q84 6 87 9L96 19L110 22Q115 24 115 29V34Z" fill="currentColor"/>
+      <path d="M36 19L45 10H60V19Z M65 10H80L90 19H65Z" fill="#dff1fb"/>
+      <rect x="108" y="25" width="7" height="4" rx="1" fill="#ffe27a"/>
+      <rect x="6" y="25" width="5" height="4" rx="1" fill="#ff8a8a"/>
+      <circle cx="30" cy="35" r="9" fill="#2b2b2b"/><circle cx="30" cy="35" r="4" fill="#cfcfcf"/>
+      <circle cx="92" cy="35" r="9" fill="#2b2b2b"/><circle cx="92" cy="35" r="4" fill="#cfcfcf"/>
+    </symbol>
+    <pattern id="patron" width="300" height="200" patternUnits="userSpaceOnUse">
+      <use href="#auto" x="10" y="14" width="96" height="40" style="color:#d7263d"/>
+      <use href="#auto" x="170" y="72" width="96" height="40" style="color:#5b7fa6" transform="translate(436 0) scale(-1 1)"/>
+      <use href="#auto" x="60" y="140" width="96" height="40" style="color:#2f2f2f"/>
+      <use href="#auto" x="200" y="6" width="60" height="25" style="color:#e9a800"/>
+    </pattern>
+  </defs>
+  <rect width="100%" height="100%" fill="#fff"/>
+  <rect width="100%" height="100%" fill="url(#patron)" opacity=".35"/>
+</svg>
+
+<div class="scene" id="scene" role="button" tabindex="0" aria-label="Abrir el sobre">
+  <div class="sobre">
+    <div class="atras"></div>
+    <div class="solapa"></div>
+    <div class="frente"></div>
+    <div class="sello">❤</div>
+  </div>
+
+  <div class="tarjeta">
+    <div class="izq">
+      <!-- Copa Piston (con alas) -->
+      <svg viewBox="0 190 736 640" aria-label="Copa Piston">
+        <g fill="#f5d422">
+          <!-- Alas y manijas (lado izquierdo, se espeja para el derecho) -->
+          <g id="lado">
+            <rect x="8" y="218" width="212" height="44" rx="8"/>
+            <rect x="38" y="268" width="152" height="38" rx="6"/>
+            <rect x="64" y="312" width="126" height="44" rx="6"/>
+            <path d="M232 222H210Q160 226 160 290Q160 350 215 362H232Z" stroke="#fff" stroke-width="4"/>
+            <path d="M232 262H222Q192 266 192 300Q192 336 222 340H232Z" fill="#fff"/>
+          </g>
+          <use href="#lado" transform="translate(736 0) scale(-1 1)"/>
+          <!-- Copa -->
+          <rect x="236" y="200" width="264" height="18" rx="3"/>
+          <rect x="236" y="222" width="264" height="30"/>
+          <path d="M232 253H504V425Q470 400 402 397H334Q290 400 232 425Z"/>
+          <!-- Vástago -->
+          <path d="M334 397H402C402 490 425 560 462 600H296C326 560 334 480 334 397Z"/>
+          <rect x="258" y="590" width="20" height="16"/>
+          <rect x="460" y="590" width="20" height="16"/>
+          <rect x="248" y="600" width="242" height="66"/>
+          <rect x="235" y="668" width="266" height="22" rx="11"/>
+          <path d="M242 696H494L512 764H224Z"/>
+          <path d="M208 782L224 770H512L528 782Z"/>
+          <rect x="188" y="786" width="360" height="36" rx="18"/>
+        </g>
+        <!-- Detalles en blanco -->
+        <g fill="#fff">
+          <rect x="236" y="229" width="264" height="3"/>
+          <rect x="236" y="236" width="264" height="3"/>
+          <rect x="236" y="243" width="264" height="3"/>
+          <path d="M298 666A70 62 0 0 1 438 666Z"/>
+        </g>
+      </svg>
+      <div class="nombre-copa">Copa Piston al mejor novio</div>
+    </div>
+    <div class="der">
+      <div class="titulo">Feliz día del noviooo!!</div>
+      <div class="sub">Te amo mucho mucho mucho</div>
+      <div class="corazon">❤</div>
+    </div>
+  </div>
+</div>
+<div class="pista">Abrilo o Sonia nunca va a conseguir a su torta 🎂</div>
+
+<script>
+  const scene = document.getElementById('scene');
+  function ajustar() {
+    const s = Math.min(1.7, innerWidth * 0.94 / 300, innerHeight * 0.8 / 190);
+    document.documentElement.style.setProperty('--s', Math.max(s, 1));
+  }
+  ajustar(); addEventListener('resize', ajustar);
+
+  function abrir() {
+    if (scene.classList.contains('abierto')) return;
+    scene.classList.add('abierto');
+    document.body.classList.add('listo');
+    setTimeout(() => scene.classList.add('out'), 900);
+  }
+  scene.addEventListener('click', abrir);
+  scene.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') abrir(); });
+</script>
+</body>
+</html>
